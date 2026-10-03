@@ -26,19 +26,33 @@ st.header("Welcme to your todo task tracker:")
 if "tasks" not in st.session_state:
     st.session_state["tasks"] = []
 
-for i in range(len(st.session_state["tasks"])):
-    st.write(str(i + 1) + ". " + st.session_state["tasks"][i])
+with st.container(border = True):
+    st.subheader("Tasks for today:")
+    for i in range(len(st.session_state["tasks"])):
+        st.write(str(i + 1) + ". " + st.session_state["tasks"][i])
 
-task = st.text_input("Enter your task")
 
-if st.button("1. Add a task"):
-    if task != "":
-        st.session_state["tasks"].append(task)
-        st.write("task added!")
+
+
+col1, col2 = st.columns(2)
+
+with col1:
+    with st.container(border = True):
+        st.subheader("Add Task")
+        task = st.text_input("New task")
+        if st.button("Add"):
+            st.session_state["tasks"].append(task)
         
-if st.button("2. Remove a task"):
-    st.write("task removed")
-if st.button("3. Exit"):
+with col2:
+    with st.container(border = True):
+        st.subheader("Remove Task")
+        taskR = st.text_input("Task to be removed")
+        
+        if st.button("Remove"): 
+            if taskR in st.session_state["tasks"]:
+                st.session_state["tasks"].remove(taskR)
+
+if st.button("3. Save and exit"):
     st.write("See you next time")
 
 
