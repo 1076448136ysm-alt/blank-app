@@ -26,33 +26,46 @@ st.header("Welcme to your todo task tracker:")
 if "tasks" not in st.session_state:
     st.session_state["tasks"] = []
 
+#display the todo list
+
 with st.container(border = True):
     st.subheader("Tasks for today:")
     for i in range(len(st.session_state["tasks"])):
         st.write(str(i + 1) + ". " + st.session_state["tasks"][i])
 
+#default mode
+if "mode" not in st.session_state:
+    st.session_state["mode"] = None
 
-
-
-col1, col2 = st.columns(2)
-
-with col1:
-    with st.container(border = True):
-        st.subheader("Add Task")
+#add page when add button is pressed
+if st.session_state["mode"] == "add":
+    with st.container(border =True):
         task = st.text_input("New task")
-        if st.button("Add"):
-            st.session_state["tasks"].append(task)
-        
-with col2:
+        if st.button("Confirm adding"):
+            if task != "":
+                st.session_state["tasks"].append(task)
+            st.session_state["mode"] = None
+ 
+#remove page when remove button is pressed
+if st.session_state["mode"] == "remove":
     with st.container(border = True):
-        st.subheader("Remove Task")
         taskR = st.text_input("Task to be removed")
-        
         if st.button("Remove"): 
             if taskR in st.session_state["tasks"]:
                 st.session_state["tasks"].remove(taskR)
+            st.session_state["mode"] = None
 
-if st.button("3. Save and exit"):
-    st.write("See you next time")
+
+col1, col2, col3 = st.columns(3)
+if st.session_state["mode"] == None:
+    with col1:
+        if st.button("Add task"):
+            st.session_state["mode"] = "add"
+    with col2: 
+        if st.button("Remove task"):
+            st.session_state["mode"] = "remove"
+    with col3: 
+        if st.button("Save and exit"):
+            st.write("See you next time")
 
 
